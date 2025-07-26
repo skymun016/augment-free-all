@@ -185,7 +185,9 @@ jobs:
           shasum -a 256 "AugmentCode-Free-${{ github.ref_name }}-Portable-${{ matrix.platform }}.tar.gz" >> dist/checksums.txt
           # macOS specific files
           if [[ "${{ matrix.os }}" == macos* ]]; then
-            shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app" >> dist/checksums.txt
+            # Create tar archive of .app bundle for checksum
+            tar -czf "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app.tar.gz" -C dist "AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app"
+            shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app.tar.gz" >> dist/checksums.txt
             shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.dmg" >> dist/checksums.txt
           fi
         fi
