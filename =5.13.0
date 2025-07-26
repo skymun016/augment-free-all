@@ -1,0 +1,9 @@
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: pyinstaller in /Users/amesky/Library/Python/3.9/lib/python/site-packages (6.14.2)
+Requirement already satisfied: setuptools>=42.0.0 in /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/site-packages (from pyinstaller) (58.0.4)
+Requirement already satisfied: altgraph in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from pyinstaller) (0.17.4)
+Requirement already satisfied: macholib>=1.8 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from pyinstaller) (1.16.3)
+Requirement already satisfied: pyinstaller-hooks-contrib>=2025.5 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from pyinstaller) (2025.5)
+Requirement already satisfied: importlib_metadata>=4.6 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from pyinstaller) (8.7.0)
+Requirement already satisfied: packaging>=22.0 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from pyinstaller) (25.0)
+Requirement already satisfied: zipp>=3.20 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from importlib_metadata>=4.6->pyinstaller) (3.23.0)

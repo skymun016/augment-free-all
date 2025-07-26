@@ -1,0 +1,7 @@
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: build in /Users/amesky/Library/Python/3.9/lib/python/site-packages (1.2.2.post1)
+Requirement already satisfied: packaging>=19.1 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from build) (25.0)
+Requirement already satisfied: pyproject_hooks in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from build) (1.2.0)
+Requirement already satisfied: importlib-metadata>=4.6 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from build) (8.7.0)
+Requirement already satisfied: tomli>=1.1.0 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from build) (2.2.1)
+Requirement already satisfied: zipp>=3.20 in /Users/amesky/Library/Python/3.9/lib/python/site-packages (from importlib-metadata>=4.6->build) (3.23.0)
