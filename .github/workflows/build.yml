@@ -56,13 +56,83 @@ jobs:
     - name: Build with PyInstaller (Windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        pyinstaller --onefile --windowed --name "AugmentCode-Free-v1.0.7-${{ matrix.platform }}" --distpath dist --add-data "augment_tools_core;augment_tools_core" --add-data "gui_qt6;gui_qt6" --add-data "languages;languages" --add-data "config;config" --hidden-import PyQt6 --hidden-import PyQt6.QtWidgets --hidden-import PyQt6.QtCore --hidden-import PyQt6.QtGui --hidden-import psutil --hidden-import xml.etree.ElementTree main.py
+        pyinstaller --onefile --windowed --name "AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}" --distpath dist --add-data "augment_tools_core;augment_tools_core" --add-data "gui_qt6;gui_qt6" --add-data "languages;languages" --add-data "config;config" --hidden-import PyQt6 --hidden-import PyQt6.QtWidgets --hidden-import PyQt6.QtCore --hidden-import PyQt6.QtGui --hidden-import psutil --hidden-import xml.etree.ElementTree main.py
     
     - name: Build with PyInstaller (macOS)
       if: startsWith(matrix.os, 'macos')
       run: |
-        pyinstaller --onefile --windowed --name "AugmentCode-Free-v1.0.7-${{ matrix.platform }}" --distpath dist --add-data "augment_tools_core:augment_tools_core" --add-data "gui_qt6:gui_qt6" --add-data "languages:languages" --add-data "config:config" --hidden-import PyQt6 --hidden-import PyQt6.QtWidgets --hidden-import PyQt6.QtCore --hidden-import PyQt6.QtGui --hidden-import psutil --hidden-import xml.etree.ElementTree main.py
-    
+        # First build the executable
+        pyinstaller --onefile --windowed --name "AugmentCode-Free" --distpath dist --add-data "augment_tools_core:augment_tools_core" --add-data "gui_qt6:gui_qt6" --add-data "languages:languages" --add-data "config:config" --hidden-import PyQt6 --hidden-import PyQt6.QtWidgets --hidden-import PyQt6.QtCore --hidden-import PyQt6.QtGui --hidden-import psutil --hidden-import xml.etree.ElementTree main.py
+
+        # Create .app bundle structure
+        APP_NAME="AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app"
+        mkdir -p "dist/$APP_NAME/Contents/MacOS"
+        mkdir -p "dist/$APP_NAME/Contents/Resources"
+
+        # Move executable to app bundle
+        mv "dist/AugmentCode-Free" "dist/$APP_NAME/Contents/MacOS/"
+
+        # Create Info.plist
+        cat > "dist/$APP_NAME/Contents/Info.plist" << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleExecutable</key>
+            <string>AugmentCode-Free</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.augmentcode.free</string>
+            <key>CFBundleName</key>
+            <string>AugmentCode-Free</string>
+            <key>CFBundleDisplayName</key>
+            <string>AugmentCode-Free</string>
+            <key>CFBundleVersion</key>
+            <string>${{ github.ref_name }}</string>
+            <key>CFBundleShortVersionString</key>
+            <string>${{ github.ref_name }}</string>
+            <key>CFBundleInfoDictionaryVersion</key>
+            <string>6.0</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.15</string>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+            <key>NSRequiresAquaSystemAppearance</key>
+            <false/>
+            <key>LSApplicationCategoryType</key>
+            <string>public.app-category.developer-tools</string>
+        </dict>
+        </plist>
+        EOF
+
+        # Make executable
+        chmod +x "dist/$APP_NAME/Contents/MacOS/AugmentCode-Free"
+
+        # Also create a traditional executable for backward compatibility
+        cp "dist/$APP_NAME/Contents/MacOS/AugmentCode-Free" "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}"
+
+    - name: Create DMG (macOS)
+      if: startsWith(matrix.os, 'macos')
+      run: |
+        APP_NAME="AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app"
+        DMG_NAME="AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.dmg"
+
+        # Create temporary DMG directory
+        mkdir -p dmg_temp
+        cp -R "dist/$APP_NAME" dmg_temp/
+
+        # Create a symbolic link to Applications folder
+        ln -s /Applications dmg_temp/Applications
+
+        # Create DMG
+        hdiutil create -volname "AugmentCode-Free ${{ github.ref_name }}" \
+          -srcfolder dmg_temp \
+          -ov -format UDZO \
+          "dist/$DMG_NAME"
+
+        # Clean up
+        rm -rf dmg_temp
 
     - name: Create portable package
       run: |
@@ -97,20 +167,27 @@ jobs:
       run: |
         # Create portable archive
         if [[ "${{ matrix.os }}" == windows* ]]; then
-          7z a "AugmentCode-Free-v1.0.7-Portable-${{ matrix.platform }}.zip" portable/
+          7z a "AugmentCode-Free-${{ github.ref_name }}-Portable-${{ matrix.platform }}.zip" portable/
         else
-          tar -czf "AugmentCode-Free-v1.0.7-Portable-${{ matrix.platform }}.tar.gz" portable/
+          tar -czf "AugmentCode-Free-${{ github.ref_name }}-Portable-${{ matrix.platform }}.tar.gz" portable/
         fi
       shell: bash
     
     - name: Generate checksums
       run: |
         if [[ "${{ matrix.os }}" == windows* ]]; then
-          certutil -hashfile "dist/AugmentCode-Free-v1.0.7-${{ matrix.platform }}.exe" SHA256 > dist/checksums.txt
-          certutil -hashfile "AugmentCode-Free-v1.0.7-Portable-${{ matrix.platform }}.zip" SHA256 >> dist/checksums.txt
+          certutil -hashfile "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.exe" SHA256 > dist/checksums.txt
+          certutil -hashfile "AugmentCode-Free-${{ github.ref_name }}-Portable-${{ matrix.platform }}.zip" SHA256 >> dist/checksums.txt
         else
-          shasum -a 256 "dist/AugmentCode-Free-v1.0.7-${{ matrix.platform }}" > dist/checksums.txt
-          shasum -a 256 "AugmentCode-Free-v1.0.7-Portable-${{ matrix.platform }}.tar.gz" >> dist/checksums.txt
+          # Traditional executable
+          shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}" > dist/checksums.txt
+          # Portable package
+          shasum -a 256 "AugmentCode-Free-${{ github.ref_name }}-Portable-${{ matrix.platform }}.tar.gz" >> dist/checksums.txt
+          # macOS specific files
+          if [[ "${{ matrix.os }}" == macos* ]]; then
+            shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.app" >> dist/checksums.txt
+            shasum -a 256 "dist/AugmentCode-Free-${{ github.ref_name }}-${{ matrix.platform }}.dmg" >> dist/checksums.txt
+          fi
         fi
       shell: bash
     
