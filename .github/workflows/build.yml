@@ -22,10 +22,8 @@ jobs:
             python-version: '3.9'
             arch: 'x64'
             platform: 'Windows-x64'
-          - os: windows-latest
-            python-version: '3.11'  # Use 3.11 for ARM64 support
-            arch: 'arm64'
-            platform: 'Windows-ARM64'
+          # Note: Windows ARM64 support temporarily disabled due to GitHub Actions limitations
+          # Will be re-enabled when GitHub Actions provides better ARM64 Python support
           # macOS builds
           - os: macos-13  # Intel
             python-version: '3.9'
