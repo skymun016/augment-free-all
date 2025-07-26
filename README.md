@@ -1,5 +1,11 @@
 # AugmentCode-Free v1.0.5
 
+![Build Status](https://github.com/skymun016/augment-free-all/workflows/Build%20Multi-Platform%20Releases/badge.svg)
+[![GitHub release](https://img.shields.io/github/v/release/skymun016/augment-free-all)](https://github.com/skymun016/augment-free-all/releases)
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](#)
+
 # AugmentCode无限免费续杯方案；新账号可获得600次免费的Claude Sonnet 4调用
 
 # AugmentCode unlimited free refill plan; new accounts can get 600 free Claude Sonnet 4 calls
@@ -7,6 +13,26 @@
 **支持多IDE**: VS Code、Cursor、Windsurf、JetBrains 的专业维护工具包
 
 **Multi-IDE Support**: Maintenance toolkit for VS Code, Cursor, Windsurf, and JetBrains
+
+## 📥 快速下载 / Quick Download
+
+### 🚀 自动构建版本 / Automated Builds
+所有版本都通过 GitHub Actions 自动构建，确保安全可靠：
+
+**最新发布版本**: [📦 前往 Releases 页面下载](https://github.com/skymun016/augment-free-all/releases/latest)
+
+### 💻 支持平台 / Supported Platforms
+- **Windows**: `AugmentCode-Free-v1.0.5-Windows.exe` (独立可执行文件)
+- **macOS**: `AugmentCode-Free-v1.0.5-macOS` (适用于 Intel 和 Apple Silicon)
+- **Linux**: `AugmentCode-Free-v1.0.5-Linux` (适用于大多数发行版)
+- **便携版**: 适用于所有平台的便携版本 (需要 Python 3.7+)
+
+### ✅ 构建状态 / Build Status
+- ✅ **Windows**: 自动构建可执行文件
+- ✅ **macOS**: 自动构建可执行文件
+- ✅ **Linux**: 自动构建可执行文件
+- ✅ **便携版**: 跨平台便携版本
+- ✅ **校验和**: 自动生成 SHA256 校验和
 
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
